@@ -8,7 +8,18 @@
     "surfaceTemp": "表面温度",
     "diameter": "直径",
     "earthDays": "地球日",
-    "km": "公里"
+    "km": "公里",
+    "names": {
+      "Mercury": "水星",
+      "Venus": "金星",
+      "Earth": "地球",
+      "Mars": "火星",
+      "Jupiter": "木星",
+      "Saturn": "土星",
+      "Uranus": "天王星",
+      "Neptune": "海王星",
+      "Pluto": "冥王星"
+    }
   },
   "quiz": {
     "takeQuiz": "开始测验",
@@ -30,6 +41,8 @@
     "cancelCompare": "取消比较",
     "selectSecondPlanet": "选择第二个行星",
     "viewComparison": "查看比较",
-    "planetInfo": "行星信息"
+    "planetInfo": "行星信息",
+    "startRotation": "开始旋转",
+    "pauseRotation": "暂停旋转"
   }
 }

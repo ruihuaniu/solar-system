@@ -8,7 +8,18 @@
     "surfaceTemp": "Surface Temperature",
     "diameter": "Diameter",
     "earthDays": "Earth days",
-    "km": "km"
+    "km": "km",
+    "names": {
+      "Mercury": "Mercury",
+      "Venus": "Venus",
+      "Earth": "Earth",
+      "Mars": "Mars",
+      "Jupiter": "Jupiter",
+      "Saturn": "Saturn",
+      "Uranus": "Uranus",
+      "Neptune": "Neptune",
+      "Pluto": "Pluto"
+    }
   },
   "quiz": {
     "takeQuiz": "Take Quiz",
@@ -30,6 +41,8 @@
     "cancelCompare": "Cancel Compare",
     "selectSecondPlanet": "Select Second Planet",
     "viewComparison": "View Comparison",
-    "planetInfo": "Planet Info"
+    "planetInfo": "Planet Info",
+    "startRotation": "Start Rotation",
+    "pauseRotation": "Pause Rotation"
   }
 }
