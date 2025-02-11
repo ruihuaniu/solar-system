@@ -4,24 +4,47 @@ import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import SolarSystem from "@/components/SolarSystem";
 import PlanetInfo from "@/components/PlanetInfo";
+import PlanetComparison from "@/components/PlanetComparison";
 import Controls from "@/components/Controls";
 import type { Planet } from "@/lib/types";
 import { planets } from "@/lib/planets";
 
 export default function Home() {
   const [selectedPlanet, setSelectedPlanet] = useState<Planet>(planets[2]);
+  const [comparisonPlanet, setComparisonPlanet] = useState<Planet | null>(null);
   const [autoRotate, setAutoRotate] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isCompareMode, setIsCompareMode] = useState(false);
 
   const handlePlanetSelect = (planet: Planet) => {
-    setSelectedPlanet(planet);
+    if (isCompareMode && selectedPlanet !== planet) {
+      setComparisonPlanet(planet);
+    } else {
+      setSelectedPlanet(planet);
+    }
     setIsDrawerOpen(true);
+  };
+
+  const toggleCompareMode = () => {
+    setIsCompareMode(!isCompareMode);
+    setComparisonPlanet(null);
+    setIsDrawerOpen(false);
   };
 
   return (
     <div className="relative h-screen w-screen bg-background overflow-hidden">
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
-        <Controls autoRotate={autoRotate} onToggleAutoRotate={() => setAutoRotate(!autoRotate)} />
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+        <Controls 
+          autoRotate={autoRotate} 
+          onToggleAutoRotate={() => setAutoRotate(!autoRotate)} 
+        />
+        <Button
+          variant={isCompareMode ? "secondary" : "outline"}
+          onClick={toggleCompareMode}
+          className="w-40"
+        >
+          {isCompareMode ? "Cancel Compare" : "Compare Planets"}
+        </Button>
       </div>
 
       <Canvas camera={{ position: [0, 20, 25], fov: 60 }}>
@@ -38,12 +61,21 @@ export default function Home() {
             variant="outline" 
             className="fixed bottom-4 left-1/2 -translate-x-1/2 z-10"
           >
-            Planet Info
+            {isCompareMode 
+              ? comparisonPlanet 
+                ? "View Comparison" 
+                : "Select Second Planet"
+              : "Planet Info"
+            }
           </Button>
         </DrawerTrigger>
         <DrawerContent>
           <div className="h-[80vh]">
-            <PlanetInfo planet={selectedPlanet} />
+            {isCompareMode && comparisonPlanet ? (
+              <PlanetComparison planets={[selectedPlanet, comparisonPlanet]} />
+            ) : (
+              <PlanetInfo planet={selectedPlanet} />
+            )}
           </div>
         </DrawerContent>
       </Drawer>
