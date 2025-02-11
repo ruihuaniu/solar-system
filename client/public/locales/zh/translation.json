@@ -1,0 +1,35 @@
+{
+  "planet": {
+    "quickFacts": "基本信息",
+    "description": "描述",
+    "funFacts": "趣闻",
+    "distanceFromSun": "距太阳距离",
+    "orbitalPeriod": "公转周期",
+    "surfaceTemp": "表面温度",
+    "diameter": "直径",
+    "earthDays": "地球日",
+    "km": "公里"
+  },
+  "quiz": {
+    "takeQuiz": "开始测验",
+    "showInfo": "显示信息",
+    "quizResults": "测验结果",
+    "youScored": "你的得分",
+    "outOf": "满分",
+    "tryAgain": "再试一次",
+    "submitAnswer": "提交答案",
+    "nextQuestion": "下一题",
+    "showResults": "显示结果",
+    "testKnowledge": "测试你对以下星球的了解"
+  },
+  "controls": {
+    "infoOnClick": "点击显示信息",
+    "on": "开",
+    "off": "关",
+    "comparePlanets": "比较行星",
+    "cancelCompare": "取消比较",
+    "selectSecondPlanet": "选择第二个行星",
+    "viewComparison": "查看比较",
+    "planetInfo": "行星信息"
+  }
+}

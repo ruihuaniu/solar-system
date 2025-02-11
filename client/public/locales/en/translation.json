@@ -1,0 +1,35 @@
+{
+  "planet": {
+    "quickFacts": "Quick Facts",
+    "description": "Description",
+    "funFacts": "Fun Facts",
+    "distanceFromSun": "Distance from Sun",
+    "orbitalPeriod": "Orbital Period",
+    "surfaceTemp": "Surface Temperature",
+    "diameter": "Diameter",
+    "earthDays": "Earth days",
+    "km": "km"
+  },
+  "quiz": {
+    "takeQuiz": "Take Quiz",
+    "showInfo": "Show Info",
+    "quizResults": "Quiz Results",
+    "youScored": "You scored",
+    "outOf": "out of",
+    "tryAgain": "Try Again",
+    "submitAnswer": "Submit Answer",
+    "nextQuestion": "Next Question",
+    "showResults": "Show Results",
+    "testKnowledge": "Test Your Knowledge About"
+  },
+  "controls": {
+    "infoOnClick": "Info on Click",
+    "on": "On",
+    "off": "Off",
+    "comparePlanets": "Compare Planets",
+    "cancelCompare": "Cancel Compare",
+    "selectSecondPlanet": "Select Second Planet",
+    "viewComparison": "View Comparison",
+    "planetInfo": "Planet Info"
+  }
+}

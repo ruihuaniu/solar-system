@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import type { Planet } from '@/lib/types';
 
 interface QuizQuestion {
@@ -12,9 +13,10 @@ interface QuizQuestion {
 }
 
 function generateQuestions(planet: Planet): QuizQuestion[] {
+  const { t } = useTranslation(); //Added useTranslation hook here.
   return [
     {
-      question: `What is the average temperature on ${planet.name}?`,
+      question: `${planet.name}${t('quiz.testKnowledge')}`,
       options: [
         `${planet.averageTemp}°C`,
         `${planet.averageTemp + 50}°C`,
@@ -24,22 +26,22 @@ function generateQuestions(planet: Planet): QuizQuestion[] {
       correctAnswer: 0
     },
     {
-      question: `How far is ${planet.name} from the Sun?`,
+      question: `${t('planet.distanceFromSun')} ${planet.name}?`,
       options: [
-        `${planet.distanceFromSunKm} km`,
-        `${planet.distanceFromSunKm + 1000000} km`,
-        `${planet.distanceFromSunKm - 500000} km`,
-        `${planet.distanceFromSunKm * 2} km`
+        `${planet.distanceFromSunKm} ${t('planet.km')}`,
+        `${planet.distanceFromSunKm + 1000000} ${t('planet.km')}`,
+        `${planet.distanceFromSunKm - 500000} ${t('planet.km')}`,
+        `${planet.distanceFromSunKm * 2} ${t('planet.km')}`
       ],
       correctAnswer: 0
     },
     {
-      question: `What is the orbital period of ${planet.name}?`,
+      question: `${t('planet.orbitalPeriod')} ${planet.name}?`,
       options: [
-        `${planet.orbitalPeriod} Earth days`,
-        `${planet.orbitalPeriod + 100} Earth days`,
-        `${planet.orbitalPeriod - 50} Earth days`,
-        `${planet.orbitalPeriod * 2} Earth days`
+        `${planet.orbitalPeriod} ${t('planet.earthDays')}`,
+        `${planet.orbitalPeriod + 100} ${t('planet.earthDays')}`,
+        `${planet.orbitalPeriod - 50} ${t('planet.earthDays')}`,
+        `${planet.orbitalPeriod * 2} ${t('planet.earthDays')}`
       ],
       correctAnswer: 0
     }
@@ -56,6 +58,7 @@ export default function PlanetQuiz({ planet }: PlanetQuizProps) {
   const [score, setScore] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [isAnswered, setIsAnswered] = useState(false);
+  const { t } = useTranslation();
 
   const questions = generateQuestions(planet);
   const currentQuestion = questions[currentQuestionIndex];
@@ -92,16 +95,16 @@ export default function PlanetQuiz({ planet }: PlanetQuizProps) {
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="text-2xl text-center text-purple-400">
-            Quiz Results
+            {t('quiz.quizResults')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-center text-xl">
-            You scored {score} out of {questions.length}!
+            {t('quiz.youScored')} {score} {t('quiz.outOf')} {questions.length}!
           </p>
           <div className="flex justify-center">
             <Button onClick={resetQuiz} variant="outline">
-              Try Again
+              {t('quiz.tryAgain')}
             </Button>
           </div>
         </CardContent>
@@ -113,7 +116,7 @@ export default function PlanetQuiz({ planet }: PlanetQuizProps) {
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-xl text-purple-400">
-          Quiz: Test Your Knowledge About {planet.name}
+          {t('quiz.testKnowledge')} {planet.name}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -150,11 +153,11 @@ export default function PlanetQuiz({ planet }: PlanetQuizProps) {
         <div className="flex justify-between mt-4">
           {!isAnswered ? (
             <Button onClick={handleAnswer} disabled={selectedAnswer === null}>
-              Submit Answer
+              {t('quiz.submitAnswer')}
             </Button>
           ) : (
             <Button onClick={handleNext}>
-              {currentQuestionIndex === questions.length - 1 ? 'Show Results' : 'Next Question'}
+              {currentQuestionIndex === questions.length - 1 ? t('quiz.showResults') : t('quiz.nextQuestion')}
             </Button>
           )}
         </div>
