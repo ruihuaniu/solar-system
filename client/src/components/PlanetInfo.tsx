@@ -25,7 +25,7 @@ export default function PlanetInfo({ planet }: PlanetInfoProps) {
         <CardHeader className="p-0 mb-4 md:mb-6">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl md:text-3xl font-bold text-purple-400">
-              {planet.name}
+              {t(`planet.names.${planet.name}`)}
             </h1>
             <Button
               variant="outline"
