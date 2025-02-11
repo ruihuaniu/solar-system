@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useMemo } from "react";
 import { useFrame, useThree, useLoader } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import * as THREE from "three";
@@ -22,6 +22,8 @@ function Planet({
 }: PlanetProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const orbitRef = useRef<THREE.Group>(null);
+  const trailRef = useRef<THREE.Line>(null);
+  const pointsRef = useRef<THREE.Vector3[]>([]);
   const texture = useLoader(THREE.TextureLoader, planet.texture);
   const ringTexture =
     planet.name === "Saturn"
@@ -31,10 +33,36 @@ function Planet({
 
   const isMobile = window.innerWidth < 768;
 
+  // Create orbit trail
+  const orbitTrail = useMemo(() => {
+    const points = [];
+    const segments = 128;
+    for (let i = 0; i <= segments; i++) {
+      const angle = (i / segments) * Math.PI * 2;
+      const x = Math.cos(angle) * distance;
+      const z = Math.sin(angle) * distance;
+      points.push(new THREE.Vector3(x, 0, z));
+    }
+    pointsRef.current = points;
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({
+      color: 0x666666,
+      transparent: true,
+      opacity: 0.2,
+    });
+    return new THREE.Line(geometry, material);
+  }, [distance]);
+
   useFrame(() => {
     if (autoRotate && meshRef.current && orbitRef.current) {
       meshRef.current.rotation.y += planet.rotationSpeed;
       orbitRef.current.rotation.y += planet.orbitSpeed;
+
+      // Update trail opacity based on camera distance
+      if (trailRef.current) {
+        const material = trailRef.current.material as THREE.LineBasicMaterial;
+        material.opacity = 0.2 + Math.sin(Date.now() * 0.001) * 0.1;
+      }
     }
     // Adjust camera position for mobile
     if (isMobile && meshRef.current) {
@@ -87,6 +115,9 @@ function Planet({
 
   return (
     <group ref={orbitRef}>
+      {/* Orbit Trail */}
+      <primitive ref={trailRef} object={orbitTrail} />
+
       <mesh
         ref={meshRef}
         position={[distance, 0, 0]}
@@ -191,52 +222,7 @@ export default function SolarSystem({
         <meshBasicMaterial map={sunTexture} color="#FDB813" />
       </mesh>
 
-      {/* Asteroid Belt */}
-      <group rotation={[Math.PI / 8, 0, 0]}>
-        {Array.from({ length: 200 }).map((_, i) => {
-          const angle = (i / 200) * Math.PI * 2;
-          const radius = 18 + Math.random() * 2; // Between Mars and Jupiter
-          const x = Math.cos(angle) * radius;
-          const z = Math.sin(angle) * radius;
-          const y = (Math.random() - 0.5) * 2;
-          const asteroidTextures = [
-            "/textures/2k_asteroid_1.jpg",
-            "/textures/2k_asteroid_2.jpg",
-            "/textures/2k_asteroid_3.jpg",
-            "/textures/2k_asteroid_4.jpg",
-          ];
-          const randomTexture = useLoader(
-            THREE.TextureLoader,
-            asteroidTextures[
-              Math.floor(Math.random() * asteroidTextures.length)
-            ],
-          );
-          return (
-            <mesh
-              key={i}
-              position={[x, y, z]}
-              rotation={[
-                Math.random() * Math.PI,
-                Math.random() * Math.PI,
-                Math.random() * Math.PI,
-              ]}
-              scale={[
-                0.08 + Math.random() * 0.08,
-                0.06 + Math.random() * 0.08,
-                0.07 + Math.random() * 0.08,
-              ]}
-            >
-              <icosahedronGeometry args={[1, Math.floor(Math.random() * 2)]} />
-              <meshStandardMaterial
-                map={randomTexture}
-                metalness={0.5}
-                roughness={0.2}
-              />
-            </mesh>
-          );
-        })}
-      </group>
-
+      {/* Planets */}
       {planets.map((planet) => (
         <Planet
           key={planet.name}
