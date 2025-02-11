@@ -1,5 +1,5 @@
-import { useRef, useEffect } from "react";
-import { useFrame, useLoader, useThree } from "@react-three/fiber";
+import { useRef } from "react";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import * as THREE from "three";
 import { planets } from "@/lib/planets";
@@ -106,51 +106,6 @@ export default function SolarSystem({
   autoRotate,
 }: SolarSystemProps) {
   const sunTexture = useLoader(THREE.TextureLoader, "/textures/2k_sun.jpg");
-  const { camera } = useThree();
-  const controlsRef = useRef<any>();
-
-  useEffect(() => {
-    if (controlsRef.current) {
-      const planetPosition = new THREE.Vector3(
-        selectedPlanet.distanceFromSun,
-        0,
-        0
-      );
-      const distance = selectedPlanet.size * 5; // Adjust zoom distance based on planet size
-
-      // Calculate camera position
-      const cameraPosition = new THREE.Vector3(
-        planetPosition.x + distance,
-        distance * 0.5,
-        distance
-      );
-
-      // Animate camera position
-      const duration = 1000; // 1 second
-      const startPosition = camera.position.clone();
-      const startTime = Date.now();
-
-      const animate = () => {
-        const now = Date.now();
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-        // Smooth easing
-        const t = progress < 0.5
-          ? 2 * progress * progress
-          : -1 + (4 - 2 * progress) * progress;
-
-        camera.position.lerpVectors(startPosition, cameraPosition, t);
-        controlsRef.current.target.lerp(planetPosition, t);
-
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        }
-      };
-
-      animate();
-    }
-  }, [selectedPlanet, camera]);
 
   return (
     <>
@@ -176,7 +131,7 @@ export default function SolarSystem({
       <group rotation={[Math.PI / 8, 0, 0]}>
         {Array.from({ length: 200 }).map((_, i) => {
           const angle = (i / 200) * Math.PI * 2;
-          const radius = 18 + Math.random() * 2;
+          const radius = 18 + Math.random() * 2; // Between Mars and Jupiter
           const x = Math.cos(angle) * radius;
           const z = Math.sin(angle) * radius;
           const y = (Math.random() - 0.5) * 2;
@@ -188,7 +143,9 @@ export default function SolarSystem({
           ];
           const randomTexture = useLoader(
             THREE.TextureLoader,
-            asteroidTextures[Math.floor(Math.random() * asteroidTextures.length)],
+            asteroidTextures[
+              Math.floor(Math.random() * asteroidTextures.length)
+            ],
           );
           return (
             <mesh
@@ -228,7 +185,6 @@ export default function SolarSystem({
       ))}
 
       <OrbitControls
-        ref={controlsRef}
         enableZoom={true}
         enablePan={true}
         enableRotate={true}
