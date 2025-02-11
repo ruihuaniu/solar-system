@@ -15,14 +15,16 @@ export default function Home() {
   const [autoRotate, setAutoRotate] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isCompareMode, setIsCompareMode] = useState(false);
+  const [showInfoOnClick, setShowInfoOnClick] = useState(true);
 
   const handlePlanetSelect = (planet: Planet) => {
     if (isCompareMode && selectedPlanet !== planet) {
       setComparisonPlanet(planet);
+      if (showInfoOnClick) setIsDrawerOpen(true);
     } else {
       setSelectedPlanet(planet);
+      if (showInfoOnClick) setIsDrawerOpen(true);
     }
-    setIsDrawerOpen(true);
   };
 
   const toggleCompareMode = () => {
@@ -38,6 +40,13 @@ export default function Home() {
           autoRotate={autoRotate} 
           onToggleAutoRotate={() => setAutoRotate(!autoRotate)} 
         />
+        <Button
+          variant={showInfoOnClick ? "default" : "outline"}
+          onClick={() => setShowInfoOnClick(!showInfoOnClick)}
+          className="w-40"
+        >
+          Info on Click: {showInfoOnClick ? "On" : "Off"}
+        </Button>
         <Button
           variant={isCompareMode ? "secondary" : "outline"}
           onClick={toggleCompareMode}

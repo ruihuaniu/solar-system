@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
+import { useRef, useCallback } from "react";
+import { useFrame, useThree, useLoader } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import * as THREE from "three";
 import { planets } from "@/lib/planets";
@@ -43,15 +43,54 @@ function Planet({
     }
   });
 
+  const { camera } = useThree();
+
+  const handleClick = useCallback((e: THREE.Event) => {
+    e.stopPropagation();
+    onSelect(planet);
+
+    // Calculate position for camera
+    const planetPosition = new THREE.Vector3();
+    if (meshRef.current) {
+      meshRef.current.getWorldPosition(planetPosition);
+    }
+
+    // Add offset for better view
+    const offset = planet.size * 3;
+    const cameraTarget = new THREE.Vector3(
+      planetPosition.x,
+      planetPosition.y + offset / 2,
+      planetPosition.z + offset
+    );
+
+    // Animate camera position
+    const duration = 1000; // 1 second
+    const startPos = camera.position.clone();
+    const startTime = Date.now();
+
+    const animate = () => {
+      const now = Date.now();
+      const progress = Math.min((now - startTime) / duration, 1);
+
+      // Smooth easing
+      const eased = progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress;
+
+      camera.position.lerpVectors(startPos, cameraTarget, eased);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    animate();
+  }, [camera, onSelect, planet]);
+
   return (
     <group ref={orbitRef}>
       <mesh
         ref={meshRef}
         position={[distance, 0, 0]}
-        onClick={(e) => {
-          e.stopPropagation();
-          onSelect(planet);
-        }}
+        onClick={handleClick}
       >
         <sphereGeometry args={[planet.size, 32, 32]} />
         <meshStandardMaterial
@@ -106,6 +145,31 @@ export default function SolarSystem({
   autoRotate,
 }: SolarSystemProps) {
   const sunTexture = useLoader(THREE.TextureLoader, "/textures/2k_sun.jpg");
+  const { camera } = useThree();
+
+  const handleSunClick = () => {
+    // Reset camera to initial position
+    const duration = 1000;
+    const startPos = camera.position.clone();
+    const endPos = new THREE.Vector3(0, 20, 25);
+    const startTime = Date.now();
+
+    const animate = () => {
+      const now = Date.now();
+      const progress = Math.min((now - startTime) / duration, 1);
+
+      // Smooth easing
+      const eased = progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress;
+
+      camera.position.lerpVectors(startPos, endPos, eased);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    animate();
+  };
 
   return (
     <>
@@ -122,7 +186,7 @@ export default function SolarSystem({
       <Stars radius={100} depth={50} count={2000} factor={4} saturation={0} />
 
       {/* Sun */}
-      <mesh position={[0, 0, 0]}>
+      <mesh position={[0, 0, 0]} onClick={handleSunClick}>
         <sphereGeometry args={[2, 32, 32]} />
         <meshBasicMaterial map={sunTexture} color="#FDB813" />
       </mesh>
