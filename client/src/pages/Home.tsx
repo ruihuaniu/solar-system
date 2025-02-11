@@ -6,6 +6,8 @@ import SolarSystem from "@/components/SolarSystem";
 import PlanetInfo from "@/components/PlanetInfo";
 import PlanetComparison from "@/components/PlanetComparison";
 import Controls from "@/components/Controls";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 import type { Planet } from "@/lib/types";
 import { planets } from "@/lib/planets";
 
@@ -16,6 +18,7 @@ export default function Home() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isCompareMode, setIsCompareMode] = useState(false);
   const [showInfoOnClick, setShowInfoOnClick] = useState(true);
+  const { t } = useTranslation();
 
   const handlePlanetSelect = (planet: Planet) => {
     if (isCompareMode && selectedPlanet !== planet) {
@@ -36,6 +39,7 @@ export default function Home() {
   return (
     <div className="relative h-screen w-screen bg-background overflow-hidden">
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+        <LanguageSwitcher />
         <Controls 
           autoRotate={autoRotate} 
           onToggleAutoRotate={() => setAutoRotate(!autoRotate)} 
@@ -45,14 +49,14 @@ export default function Home() {
           onClick={() => setShowInfoOnClick(!showInfoOnClick)}
           className="w-40"
         >
-          Info on Click: {showInfoOnClick ? "On" : "Off"}
+          {t('controls.infoOnClick')}: {showInfoOnClick ? t('controls.on') : t('controls.off')}
         </Button>
         <Button
           variant={isCompareMode ? "secondary" : "outline"}
           onClick={toggleCompareMode}
           className="w-40"
         >
-          {isCompareMode ? "Cancel Compare" : "Compare Planets"}
+          {isCompareMode ? t('controls.cancelCompare') : t('controls.comparePlanets')}
         </Button>
       </div>
 
@@ -72,9 +76,9 @@ export default function Home() {
           >
             {isCompareMode 
               ? comparisonPlanet 
-                ? "View Comparison" 
-                : "Select Second Planet"
-              : "Planet Info"
+                ? t('controls.viewComparison')
+                : t('controls.selectSecondPlanet')
+              : t('controls.planetInfo')
             }
           </Button>
         </DrawerTrigger>

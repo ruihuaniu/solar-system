@@ -13,7 +13,13 @@ interface QuizQuestion {
 }
 
 function generateQuestions(planet: Planet): QuizQuestion[] {
-  const { t } = useTranslation(); //Added useTranslation hook here.
+  const { t } = useTranslation();
+  // Helper function to extract numeric value from distance string
+  const getNumericDistance = (distanceStr: string): number => {
+    const value = parseFloat(distanceStr.split(' ')[0]);
+    return isNaN(value) ? 0 : value;
+  };
+
   return [
     {
       question: `${planet.name}${t('quiz.testKnowledge')}`,
@@ -28,10 +34,10 @@ function generateQuestions(planet: Planet): QuizQuestion[] {
     {
       question: `${t('planet.distanceFromSun')} ${planet.name}?`,
       options: [
-        `${planet.distanceFromSunKm} ${t('planet.km')}`,
-        `${planet.distanceFromSunKm + 1000000} ${t('planet.km')}`,
-        `${planet.distanceFromSunKm - 500000} ${t('planet.km')}`,
-        `${planet.distanceFromSunKm * 2} ${t('planet.km')}`
+        `${planet.distanceFromSunKm}`,
+        `${getNumericDistance(planet.distanceFromSunKm) + 1000000} ${t('planet.km')}`,
+        `${getNumericDistance(planet.distanceFromSunKm) - 500000} ${t('planet.km')}`,
+        `${getNumericDistance(planet.distanceFromSunKm) * 2} ${t('planet.km')}`
       ],
       correctAnswer: 0
     },

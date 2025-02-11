@@ -15,7 +15,8 @@ interface PlanetInfoProps {
 
 export default function PlanetInfo({ planet }: PlanetInfoProps) {
   const [showQuiz, setShowQuiz] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language as 'en' | 'zh';
 
   return (
     <>
@@ -68,7 +69,7 @@ export default function PlanetInfo({ planet }: PlanetInfoProps) {
               <div className="space-y-2 md:space-y-4">
                 <h2 className="text-lg md:text-xl font-semibold text-purple-400">{t('planet.description')}</h2>
                 <p className="text-gray-300 leading-relaxed text-base md:text-lg">
-                  {planet.description}
+                  {planet.description[currentLang]}
                 </p>
               </div>
 
@@ -77,7 +78,7 @@ export default function PlanetInfo({ planet }: PlanetInfoProps) {
               <div className="space-y-2 md:space-y-4">
                 <h2 className="text-lg md:text-xl font-semibold text-purple-400">{t('planet.funFacts')}</h2>
                 <ul className="list-disc list-inside space-y-2 text-gray-300 text-base md:text-lg">
-                  {planet.funFacts.map((fact, index) => (
+                  {planet.funFacts[currentLang].map((fact, index) => (
                     <li key={index}>{fact}</li>
                   ))}
                 </ul>

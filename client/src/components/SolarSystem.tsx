@@ -4,6 +4,7 @@ import { OrbitControls, Stars } from "@react-three/drei";
 import * as THREE from "three";
 import { planets } from "@/lib/planets";
 import type { Planet } from "@/lib/types";
+import { ThreeEvent } from '@react-three/fiber';
 
 interface PlanetProps {
   planet: Planet;
@@ -73,7 +74,7 @@ function Planet({
 
   const { camera } = useThree();
 
-  const handleClick = useCallback((e: THREE.Event) => {
+  const handleClick = useCallback((e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
     onSelect(planet);
 

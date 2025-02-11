@@ -5,6 +5,16 @@ export interface Moon {
   texture: string;
 }
 
+interface MultilingualContent {
+  en: string;
+  zh: string;
+}
+
+interface MultilingualArray {
+  en: string[];
+  zh: string[];
+}
+
 export interface Planet {
   name: string;
   size: number;
@@ -16,7 +26,7 @@ export interface Planet {
   rotationSpeed: number;
   orbitSpeed: number;
   texture: string;
-  description: string;
-  funFacts: string[];
+  description: MultilingualContent;
+  funFacts: MultilingualArray;
   moons?: Moon[];
 }
