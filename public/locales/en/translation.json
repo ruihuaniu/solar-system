@@ -43,6 +43,7 @@
     "viewComparison": "View Comparison",
     "planetInfo": "Planet Info",
     "startRotation": "Start Rotation",
-    "pauseRotation": "Pause Rotation"
+    "pauseRotation": "Pause Rotation",
+    "theme": "Theme"
   }
 }

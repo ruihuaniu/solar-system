@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import type { Planet } from "@/lib/types";
 import { planets } from "@/lib/planets";
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Menu } from "lucide-react";
+import { Moon, Sun, Menu } from "lucide-react"; 
 
 export default function Home() {
   const [selectedPlanet, setSelectedPlanet] = useState<Planet>(planets[2]);
@@ -49,27 +49,38 @@ export default function Home() {
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
-              <DropdownMenu.Content 
+            <DropdownMenu.Content 
                 className="min-w-[200px] bg-background rounded-md p-2 shadow-md"
-                align="center"
+                align="end"
+                sideOffset={5}
               >
-                <DropdownMenu.Item className="outline-none">
+                <DropdownMenu.Item className="outline-none flex justify-center w-full text-black dark:text-white">
                   <LanguageSwitcher />
                 </DropdownMenu.Item>
-                <DropdownMenu.Item className="outline-none">
+                <DropdownMenu.Item className="outline-none flex justify-center w-full text-black dark:text-white">
                   <Controls 
                     autoRotate={autoRotate} 
                     onToggleAutoRotate={() => setAutoRotate(!autoRotate)} 
                   />
                 </DropdownMenu.Item>
                 <DropdownMenu.Item 
-                  className="px-2 py-1.5 outline-none rounded-sm"
+                  className="px-2 py-1.5 outline-none cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-sm text-center w-full flex items-center justify-center gap-2 relative text-black dark:text-white"
+                  onSelect={() => document.documentElement.classList.toggle('dark')}
+                >
+                  <div className="relative w-4 h-4">
+                    <Sun className="h-4 w-4 absolute rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                    <Moon className="h-4 w-4 absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                  </div>
+                  <span>{t('controls.theme')}</span>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item 
+                  className="px-2 py-1.5 outline-none cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-sm text-center w-full text-black dark:text-white"
                   onSelect={() => setShowInfoOnClick(!showInfoOnClick)}
                 >
                   {t('controls.infoOnClick')}: {showInfoOnClick ? t('controls.on') : t('controls.off')}
                 </DropdownMenu.Item>
                 <DropdownMenu.Item 
-                  className="px-2 py-1.5 outline-none cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-sm"
+                  className="px-2 py-1.5 outline-none cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-sm text-center w-full text-black dark:text-white"
                   onSelect={toggleCompareMode}
                 >
                   {isCompareMode ? t('controls.cancelCompare') : t('controls.comparePlanets')}
@@ -86,16 +97,27 @@ export default function Home() {
             onToggleAutoRotate={() => setAutoRotate(!autoRotate)} 
           />
           <Button
+            variant="outline"
+            onClick={() => document.documentElement.classList.toggle('dark')}
+            className="w-40 flex items-center justify-center gap-2 text-black dark:text-white"
+          >
+            <div className="relative w-4 h-4">
+              <Sun className="h-4 w-4 absolute rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="h-4 w-4 absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            </div>
+            <span>{t('controls.theme')}</span>
+          </Button>
+          <Button
             variant={showInfoOnClick ? "default" : "outline"}
             onClick={() => setShowInfoOnClick(!showInfoOnClick)}
-            className="w-40"
+            className="w-40 text-black dark:text-white"
           >
             {t('controls.infoOnClick')}: {showInfoOnClick ? t('controls.on') : t('controls.off')}
           </Button>
           <Button
             variant={isCompareMode ? "secondary" : "outline"}
             onClick={toggleCompareMode}
-            className="w-40"
+            className="w-40 text-black dark:text-white"
           >
             {isCompareMode ? t('controls.cancelCompare') : t('controls.comparePlanets')}
           </Button>
