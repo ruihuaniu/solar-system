@@ -41,7 +41,7 @@ export default function Home() {
   return (
     <div className="relative h-screen w-screen bg-background overflow-hidden dark:bg-black">
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
-        <div className="md:hidden ">
+        <div className="xl:hidden ">
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
               <Button variant="outline" size="icon">
@@ -90,7 +90,7 @@ export default function Home() {
           </DropdownMenu.Root>
         </div>
         
-        <div className="hidden md:flex md:flex-col md:items-center md:gap-2">
+        <div className="hidden xl:flex xl:flex-col xl:items-center xl:gap-2">
           <LanguageSwitcher />
           <Controls 
             autoRotate={autoRotate} 
