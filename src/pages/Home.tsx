@@ -51,7 +51,7 @@ export default function Home() {
             <DropdownMenu.Portal>
             <DropdownMenu.Content 
                 className="min-w-[200px] bg-background rounded-md p-2 shadow-md"
-                align="end"
+                align="center"
                 sideOffset={5}
               >
                 <DropdownMenu.Item className="outline-none flex justify-center w-full text-black dark:text-white">
