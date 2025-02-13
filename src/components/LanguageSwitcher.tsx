@@ -13,7 +13,7 @@ export default function LanguageSwitcher() {
     <Button
       variant="outline"
       onClick={toggleLanguage}
-      className="w-40"
+      className="w-40 text-black dark:text-white hover:bg-black/70"
     >
       {i18n.language === 'zh' ? '切换到英文' : 'Switch to Chinese'}
     </Button>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
@@ -20,6 +20,7 @@ export default function Home() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isCompareMode, setIsCompareMode] = useState(false);
   const [showInfoOnClick, setShowInfoOnClick] = useState(true);
+  const [showButtons, setShowButtons] = useState(true);
   const { t } = useTranslation();
 
   const handlePlanetSelect = (planet: Planet) => {
@@ -38,12 +39,48 @@ export default function Home() {
     setIsDrawerOpen(false);
   };
 
+  const handleToggleButtons = () => setShowButtons(prev => !prev);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'h') {
+        handleToggleButtons();
+      }
+    };
+
+    let clickCount = 0;
+    let clickTimer: NodeJS.Timeout;
+
+    const handleClick = () => {
+      clickCount++;
+      if (clickCount === 1) {
+        clickTimer = setTimeout(() => {
+          clickCount = 0;
+        }, 400);
+      } else if (clickCount === 3) {
+        handleToggleButtons();
+        clickCount = 0;
+        clearTimeout(clickTimer);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('click', handleClick);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('click', handleClick);
+      clearTimeout(clickTimer);
+    };
+  }, []);
+
   return (
     <div className="relative h-screen w-screen bg-background overflow-hidden dark:bg-black">
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
-        <div className="xl:hidden ">
+      <div className="flex flex-col items-center gap-2">
+        <div className={`xl:hidden absolute z-10 top-4 left-1/2 -translate-x-1/2 transition-opacity duration-300 ${showButtons ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           <DropdownMenu.Root>
-            <DropdownMenu.Trigger asChild>
+            <DropdownMenu.Trigger asChild
+            >
               <Button variant="outline" size="icon">
                 <Menu className="h-5 w-5" />
               </Button>
@@ -90,7 +127,7 @@ export default function Home() {
           </DropdownMenu.Root>
         </div>
         
-        <div className="hidden xl:flex xl:flex-col xl:items-center xl:gap-2">
+        <div className={`hidden absolute z-10 left-4 top-4 xl:flex xl:flex-col xl:items-center xl:gap-2 transition-opacity duration-300 ${showButtons ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           <LanguageSwitcher />
           <Controls 
             autoRotate={autoRotate} 
@@ -99,7 +136,7 @@ export default function Home() {
           <Button
             variant="outline"
             onClick={() => document.documentElement.classList.toggle('dark')}
-            className="w-40 flex items-center justify-center gap-2 text-black dark:text-white"
+            className="w-40 flex items-center justify-center gap-2 text-black dark:text-white hover:bg-black/70"
           >
             <div className="relative w-4 h-4">
               <Sun className="h-4 w-4 absolute rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -108,16 +145,16 @@ export default function Home() {
             <span>{t('controls.theme')}</span>
           </Button>
           <Button
-            variant={showInfoOnClick ? "default" : "outline"}
+            variant={"outline"}
             onClick={() => setShowInfoOnClick(!showInfoOnClick)}
-            className="w-40 text-black dark:text-white"
+            className="w-40 text-black dark:text-white hover:bg-black/70"
           >
             {t('controls.infoOnClick')}: {showInfoOnClick ? t('controls.on') : t('controls.off')}
           </Button>
           <Button
             variant={isCompareMode ? "secondary" : "outline"}
             onClick={toggleCompareMode}
-            className="w-40 text-black dark:text-white"
+            className="w-40 text-black dark:text-white hover:bg-black/70"
           >
             {isCompareMode ? t('controls.cancelCompare') : t('controls.comparePlanets')}
           </Button>
@@ -136,7 +173,7 @@ export default function Home() {
         <DrawerTrigger asChild>
           <Button 
             variant="outline" 
-            className="fixed bottom-4 left-1/2 -translate-x-1/2 z-10"
+            className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-10 text-black dark:text-white transition-opacity duration-300 ${showButtons ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
           >
             {isCompareMode 
               ? comparisonPlanet 
