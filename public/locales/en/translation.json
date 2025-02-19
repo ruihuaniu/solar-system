@@ -45,5 +45,10 @@
     "startRotation": "Start Rotation",
     "pauseRotation": "Pause Rotation",
     "theme": "Theme"
+  },
+  "zenMode":{
+    "description":"Toggle Zen Mode by:",
+    "method1":"Clicking 3 times",
+    "method2":"Using shortcut"
   }
 }

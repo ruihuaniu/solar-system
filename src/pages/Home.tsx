@@ -11,8 +11,9 @@ import { useTranslation } from "react-i18next";
 import type { Planet } from "@/lib/types";
 import { planets } from "@/lib/planets";
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Moon, Sun, Menu } from "lucide-react"; 
+import { Moon, Sun, Menu, HelpCircle, X } from "lucide-react"; 
 import BackgroundMusic from "@/components/BackgroundMusic";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function Home() {
   const [selectedPlanet, setSelectedPlanet] = useState<Planet>(planets[2]);
@@ -22,6 +23,7 @@ export default function Home() {
   const [isCompareMode, setIsCompareMode] = useState(false);
   const [showInfoOnClick, setShowInfoOnClick] = useState(false);
   const [showButtons, setShowButtons] = useState(true);
+  const [showZenModeHelp, setShowZenModeHelp] = useState(false);
   const { t } = useTranslation();
 
   const handlePlanetSelect = (planet: Planet) => {
@@ -170,7 +172,6 @@ export default function Home() {
         />
        
       </Canvas>
-      <BackgroundMusic />
 
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <DrawerTrigger asChild>
@@ -196,6 +197,35 @@ export default function Home() {
           </div>
         </DrawerContent>
       </Drawer>
+
+      <div className={`${showButtons ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <BackgroundMusic />
+      </div>
+
+      <div className={`absolute bottom-4 left-4 z-50 transition-all duration-300 ${showButtons ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <button 
+          onClick={() => setShowZenModeHelp(!showZenModeHelp)}
+          className="dark:text-gray-500 hover:dark:text-gray-700"
+          aria-label={t('zenMode.helpButtonLabel')}
+        >
+          {showZenModeHelp ? <X size={24} /> : <HelpCircle size={20} />}
+        </button>
+
+        {showZenModeHelp && (
+          <div className="mt-2 dark:bg-gray-800 dark:text-white p-3 rounded-md shadow-lg max-w-xs">
+            <p>{t('zenMode.description')}</p>
+            <ul className="list-disc pl-5 mt-2">
+              <li>{t('zenMode.method1')}</li>
+              <li>
+                {t('zenMode.method2')}{' '}
+                <kbd className="bg-gray-600 px-1 rounded">Ctrl</kbd> + 
+                <kbd className="bg-gray-600 px-1 rounded">Shift</kbd> + 
+                <kbd className="bg-gray-600 px-1 rounded">H</kbd>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

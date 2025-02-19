@@ -7,7 +7,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'zh',
-    lng: 'zh', // Set Chinese as default
+    lng: 'en', // Set Chinese as default
     debug: true,
     interpolation: {
       escapeValue: false,
