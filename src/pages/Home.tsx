@@ -12,6 +12,7 @@ import type { Planet } from "@/lib/types";
 import { planets } from "@/lib/planets";
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Moon, Sun, Menu } from "lucide-react"; 
+import BackgroundMusic from "@/components/BackgroundMusic";
 
 export default function Home() {
   const [selectedPlanet, setSelectedPlanet] = useState<Planet>(planets[2]);
@@ -19,7 +20,7 @@ export default function Home() {
   const [autoRotate, setAutoRotate] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isCompareMode, setIsCompareMode] = useState(false);
-  const [showInfoOnClick, setShowInfoOnClick] = useState(true);
+  const [showInfoOnClick, setShowInfoOnClick] = useState(false);
   const [showButtons, setShowButtons] = useState(true);
   const { t } = useTranslation();
 
@@ -167,7 +168,9 @@ export default function Home() {
           onSelectPlanet={handlePlanetSelect}
           autoRotate={autoRotate}
         />
+       
       </Canvas>
+      <BackgroundMusic />
 
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <DrawerTrigger asChild>
